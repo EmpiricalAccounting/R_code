@@ -23,14 +23,14 @@ financial_data |>
                  fill = "lightgray", color = "black") +
   # 表示させる範囲の指定
   scale_x_continuous(limits = c(-0.08, 0.08)) +
-  # タイトルとx軸とy軸のラベルの設定
+  # ラベルの設定
   labs(title = "Histogram of ROA", x = "ROA", y = "Count") +
   # シンプルな表示とする
   theme_classic()
 
 # ROAのヒストグラムで[0,0.008]のビンの色を黒色にする
 financial_data |>
-  # 黒色にしたい範囲[0,0.008]の観測値にTRUEを振る
+  # 黒色にしたい範囲[0,0.008]のROAの観測値にTRUEを振る
   mutate(highlight = between(roa, 0, 0.008)) |>
   ggplot() +
   geom_histogram(aes(x = roa, fill = highlight),
@@ -45,7 +45,7 @@ financial_data |>
 # ビンの区切りを作成する
 bin_breaks <- seq(-0.08, 0.08, by = 0.008)
 
-# ROAについてビンの番号を振る
+# ROAのビンの番号を振る
 financial_data <- financial_data |>
   mutate(bin = cut(roa, breaks = bin_breaks,
                    include.lowest = TRUE, labels = FALSE))
@@ -61,10 +61,10 @@ bin_quantiles <- financial_data |>
   mutate(bin_mid = (bin_breaks[bin]
                     + bin_breaks[bin + 1]) / 2)
 
-# 四分位点ごとにWACの折れ線グラフを表示
+# 四分位点ごとにWACの折れ線グラフを作成
 bin_quantiles |>
   ggplot(aes(x = bin_mid)) +
-  # 四分位ごとに折れ線
+  # 四分位ごとの折れ線グラフ
   geom_line(aes(y = q_25, linewidth = "25%"), color = "black") +
   geom_line(aes(y = q_50, linewidth = "50%"), color = "black") +
   geom_line(aes(y = q_75, linewidth = "75%"), color = "black") +
