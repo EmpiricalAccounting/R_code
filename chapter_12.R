@@ -13,11 +13,13 @@ table(financial_data$accounting_standard)
 
 # 変数の計算
 financial_data <- financial_data |>
-  mutate(ifrs                 = if_else(accounting_standard == "IFRS", 1, 0),
+  mutate(ifrs                 = if_else(accounting_standard == "IFRS",
+                                        1, 0),
          ratio_goodwill       = goodwill / total_assets,
          ratio_rd             = research_development / sales,
          ratio_foreign_sales  = foreign_sales / sales,
-         ratio_foreign_shares = foreign_ownership * shares_unit / shares_outstanding,
+         ratio_foreign_shares = foreign_ownership * shares_unit
+                                / shares_outstanding,
          size                 = log(total_assets),
          leverage             = liabilities / total_assets,
          roa                  = earnings / total_assets,
@@ -51,10 +53,11 @@ t.test(leverage ~ ifrs, data = financial_data)
 t.test(roa ~ ifrs, data = financial_data)
 
 # ロジット分析の実施
-model_logit <- glm(ifrs ~ ratio_goodwill + ratio_rd + ratio_foreign_sales
-                    + ratio_foreign_shares + size + leverage + roa,
-                     data = financial_data,
-                     family = binomial(link = "logit"))
+model_logit <- glm(ifrs ~ ratio_goodwill + ratio_rd
+                   + ratio_foreign_sales + ratio_foreign_shares
+                   + size+ leverage + roa,
+                   data = financial_data,
+                   family = binomial(link = "logit"))
 
 # modelsummaryパッケージの読み込み
 library(modelsummary)

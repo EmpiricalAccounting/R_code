@@ -13,7 +13,7 @@ rm(list = ls())
 # tidyverseパッケージのインストール（初回）
 install.packages(c("tidyverse", "car", "psych", "modelsummary"))
 
-# tidyverseパッケージのインストール（インストール完了後は，# でコメント・アウト）
+# tidyverseパッケージのインストール（完了後は#でコメント・アウト）
 # install.packages(c("tidyverse", "car", "psych", "modelsummary"))
 
 # パッケージの読み込み
@@ -26,13 +26,17 @@ financial_data <- read_csv("ch04_financial_data.csv")
 head(financial_data)
 
 # 因子型への変更
-financial_data <- financial_data |> 
+financial_data <- financial_data |>
   mutate(firm_id             = as.factor(firm_id),
          firm_name           = as.factor(firm_name),
          stock_code          = as.factor(stock_code),
          industry_name       = as.factor(industry_name),
          stock_market        = as.factor(stock_market),
          accounting_standard = as.factor(accounting_standard))
+
+
+# 因子型に変わっているか確認
+head(financial_data)
 
 # 記述統計
 summary(financial_data)
@@ -53,11 +57,12 @@ financial_data <- financial_data |>
          financial_leverage = total_assets / equity)
 
 # ROEの三分解の計算結果を表示
+# パイプ演算子を使用しない場合
+select(financial_data,
+       firm_name, year, roe,
+       profit_margin, asset_turnover, financial_leverage)
+
 # パイプ演算子を使用する場合
 financial_data |>
-  select(firm_name, year, roe, profit_margin, asset_turnover, financial_leverage) |>
-  print()
-
-# パイプ演算子を使用しない場合
-print(select(financial_data,
-             firm_name, year, roe, profit_margin, asset_turnover, financial_leverage))
+  select(firm_name, year, roe,
+         profit_margin, asset_turnover, financial_leverage)

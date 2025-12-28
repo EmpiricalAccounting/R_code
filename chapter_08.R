@@ -49,27 +49,31 @@ start_end <- dates |>
 
 # 決算発表日からの相対日数を各日付ごとに適用
 dates_announce <- dates |>
-  inner_join(start_end, join_by(between(date_number, start_number, end_number))) |>
+  inner_join(start_end,
+             join_by(between(date_number, start_number, end_number))) |>
   mutate(relative_date = date_number - announce_number) |>
   select(announce_date, relative_date, date)
 
 # 相対日数と利益データと株価データとインデックスデータの結合
 sample_data <- earnings_change |>
-  left_join(dates_announce, by = "announce_date", relationship = "many-to-many") |>
+  left_join(dates_announce, by = "announce_date",
+            relationship = "many-to-many") |>
   left_join(stock_data, by = c("firm_id", "date")) |>
   left_join(index_data, by = "date")
 
 # firm_idが1、yearが2023のデータを確認
 sample_data |>
   filter(firm_id == 1, year == 2023) |>
-  select(announce_date, relative_date, date, earnings_change, stock_price, index) |>
+  select(announce_date, relative_date, date,
+         earnings_change, stock_price, index) |>
   print(n = Inf)
 
 # 株式リターンの計算
 sample_return <- sample_data |>
   arrange(firm_id, date) |>
   group_by(firm_id, year) |>
-  mutate(return       = (stock_price - lag(stock_price, 1)) / lag(stock_price, 1),
+  mutate(return       = (stock_price - lag(stock_price, 1))
+                        / lag(stock_price, 1),
          index_return = (index - lag(index, 1)) / lag(index, 1),
          return       = replace_na(return, 0),
          index_return = replace_na(index_return, 0)) |>
@@ -121,10 +125,12 @@ sample_car_mean |>
 # CARのグラフの作成
 sample_car_mean |>
   # 増益（Good）と減益（Bad）のラベルを作って順番を調整
-  mutate(earnings_change_label = if_else(earnings_change, "Good", "Bad"),
-         earnings_change_label = factor(earnings_change_label, levels = c("Good", "Bad"))) |>
+  mutate(change_label = if_else(earnings_change, "Good", "Bad"),
+         change_label = factor(change_label,
+                               levels = c("Good", "Bad"))) |>
   ggplot() +
-  geom_line(aes(x = relative_date, y = mean_car, linetype = earnings_change_label)) +
+  geom_line(aes(x = relative_date, y = mean_car,
+                linetype = change_label)) +
   # CAR＝0に横線を引く
   geom_hline(yintercept = 0, linetype = "dashed", color = "gray80") +
   # 0日に縦線を引く
@@ -133,5 +139,4 @@ sample_car_mean |>
        x        = "Relative Date",
        y        = "CAR",
        linetype = "Earnings Change") +
-  theme(legend.position = "bottom") +
   theme_classic()

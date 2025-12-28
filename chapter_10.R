@@ -23,10 +23,8 @@ financial_data <- financial_data |>
                                   "shakeout", "decline")))
 
 # それぞれのライフサイクルでの観測値の数をカウント
-lifecycle_counts <- financial_data |>
-  count(lifecycle, name = "n") |>
-  arrange(lifecycle)
-lifecycle_counts
+financial_data |>
+  count(lifecycle)
 
 # 変数の計算
 financial_data <- financial_data |>
@@ -36,25 +34,22 @@ financial_data <- financial_data |>
          delta_roa            = roa - lag(roa, 1),
          lead_1_delta_roa     = lead(delta_roa, 1),
          lead_2_delta_roa     = lead(delta_roa, 2),
-         delta_assets         = (total_assets - lag(total_assets, 1)) / lag(total_assets, 1),
+         delta_assets         = (total_assets - lag(total_assets, 1))
+                                / lag(total_assets, 1),
          asset_turnover       = sales / total_assets,
          delta_asset_turnover = asset_turnover - lag(asset_turnover, 1),
          profit_margin        = operating_income / sales,
          delta_profit_margin  = profit_margin - lag(profit_margin, 1),
 
          # ライフサイクルステージそれぞれのダミー変数の作成
-         intro   = if_else(lifecycle == "intro", 1, 0),
-         growth  = if_else(lifecycle == "growth", 1, 0),
-         mature  = if_else(lifecycle == "mature", 1, 0),
+         intro    = if_else(lifecycle == "intro", 1, 0),
+         growth   = if_else(lifecycle == "growth", 1, 0),
+         mature   = if_else(lifecycle == "mature", 1, 0),
          decline  = if_else(lifecycle == "decline", 1, 0),
          shakeout = if_else(lifecycle == "shakeout", 1, 0),
 
-         # 年度ダミー
-         # 年度を因子型にすることで，重回帰分析で年度ダミーとして扱われる
-         year = as.factor(year),
-         
-         # 企業コードを因子型にする
-         firm_id = as.factor(firm_id)
+         # yearを因子型にすることで重回帰分析で年度ダミーとして扱われる
+         year = as.factor(year)
   ) |>
   ungroup()
 
@@ -63,16 +58,18 @@ summary(financial_data)
 
 # 重回帰分析
 # 従属変数：1期先のROA
-model_lead_1 <- lm(lead_1_delta_roa ~ roa + delta_roa + delta_assets + delta_asset_turnover
-                   + delta_profit_margin + intro + growth + shakeout + decline + year,
+model_lead_1 <- lm(lead_1_delta_roa ~ roa + delta_roa + delta_assets
+                   + delta_asset_turnover + delta_profit_margin
+                   + intro + growth + shakeout + decline + year,
                    data = financial_data)
 
 # 結果の表示：1期先のROA
 summary(model_lead_1)
 
 # 従属変数：2期先のROA
-model_lead_2 <- lm(lead_2_delta_roa ~ roa + delta_roa + delta_assets + delta_asset_turnover
-                   + delta_profit_margin + intro + growth + shakeout + decline + year,
+model_lead_2 <- lm(lead_2_delta_roa ~ roa + delta_roa + delta_assets
+                   + delta_asset_turnover + delta_profit_margin
+                   + intro + growth + shakeout + decline + year,
                    data = financial_data)
 
 # 結果の表示：2期先のROA
@@ -82,12 +79,13 @@ summary(model_lead_2)
 library(modelsummary)
 
 # msummary()による結果の表示
-# list()で結果を並べることで複数の結果を並べることができる
+# list()で結果を並べることで複数の結果を1つの表にできる
 msummary(list(model_lead_1, model_lead_2),
          # 表示したい係数を指定する
-         coef_map = c("roa", "delta_roa", "delta_assets", "delta_asset_turnover",
-                      "delta_profit_margin", "intro", "growth", "shakeout",
-                      "decline", "(Intercept)"),
+         coef_map = c("roa", "delta_roa", "delta_assets",
+                      "delta_asset_turnover", "delta_profit_margin",
+                      "intro", "growth", "shakeout", "decline",
+                      "(Intercept)"),
          # t値を表示する
          statistic = "statistic",
          # 有意の星をつける
@@ -95,4 +93,6 @@ msummary(list(model_lead_1, model_lead_2),
          # 有意水準と星の数を設定する
          stars = c("*" = .10, "**" = .05, "***" = .01),
          # 観測値の数と自由度調整済み決定係数を表示させる
-         gof_map = c("nobs", "adj.r.squared"))
+         gof_map = c("nobs", "adj.r.squared"),
+         # 結果の表の保存
+         output = "ch10_result.html")
