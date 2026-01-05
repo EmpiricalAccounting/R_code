@@ -26,13 +26,13 @@ financial_data <- read_csv("ch04_financial_data.csv")
 head(financial_data)
 
 # 因子型への変更
-financial_data <- financial_data |>
-  mutate(firm_id             = as.factor(firm_id),
-         firm_name           = as.factor(firm_name),
-         stock_code          = as.factor(stock_code),
-         industry_name       = as.factor(industry_name),
-         stock_market        = as.factor(stock_market),
-         accounting_standard = as.factor(accounting_standard))
+financial_data <- mutate(financial_data,
+                  firm_id             = as.factor(firm_id),
+                  firm_name           = as.factor(firm_name),
+                  stock_code          = as.factor(stock_code),
+                  industry_name       = as.factor(industry_name),
+                  stock_market        = as.factor(stock_market),
+                  accounting_standard = as.factor(accounting_standard))
 
 
 # 因子型に変わっているか確認

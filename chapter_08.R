@@ -47,7 +47,7 @@ start_end <- dates |>
   mutate(start_number = announce_number - 240,
          end_number = announce_number + 120)
 
-# 決算発表日からの相対日数を各日付ごとに適用
+# 決算発表日からの相対日数を日ごとに適用
 dates_announce <- dates |>
   inner_join(start_end,
              join_by(between(date_number, start_number, end_number))) |>

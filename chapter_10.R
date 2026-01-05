@@ -42,10 +42,10 @@ financial_data <- financial_data |>
          delta_profit_margin  = profit_margin - lag(profit_margin, 1),
 
          # ライフサイクルステージそれぞれのダミー変数の作成
-         intro    = if_else(lifecycle == "intro", 1, 0),
-         growth   = if_else(lifecycle == "growth", 1, 0),
-         mature   = if_else(lifecycle == "mature", 1, 0),
-         decline  = if_else(lifecycle == "decline", 1, 0),
+         intro    = if_else(lifecycle == "intro",    1, 0),
+         growth   = if_else(lifecycle == "growth",   1, 0),
+         mature   = if_else(lifecycle == "mature",   1, 0),
+         decline  = if_else(lifecycle == "decline",  1, 0),
          shakeout = if_else(lifecycle == "shakeout", 1, 0),
 
          # yearを因子型にすることで重回帰分析で年度ダミーとして扱われる
