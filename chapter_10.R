@@ -48,7 +48,7 @@ financial_data <- financial_data |>
          decline  = if_else(lifecycle == "decline",  1, 0),
          shakeout = if_else(lifecycle == "shakeout", 1, 0),
 
-         # yearを因子型にすることで重回帰分析で年度ダミーとして扱われる
+         # yearを因子型にして重回帰分析で年度ダミーとして利用する
          year = as.factor(year)
   ) |>
   ungroup()

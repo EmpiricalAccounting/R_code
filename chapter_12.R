@@ -22,10 +22,7 @@ financial_data <- financial_data |>
                                 / shares_outstanding,
          size                 = log(total_assets),
          leverage             = liabilities / total_assets,
-         roa                  = earnings / total_assets,
-
-         # 企業コードを因子型にする
-         firm_id = as.factor(firm_id))
+         roa                  = earnings / total_assets)
 
 # 記述統計量の表示
 summary(financial_data)
@@ -71,5 +68,7 @@ msummary(model_logit,
          # 有意水準と星の数を設定する
          stars = c("*" = .10, "**" = .05, "***" = .01),
          # 観測値の数を表示させる
-         gof_map = "nobs")
+         gof_map = "nobs",
+         # 結果の表の保存
+         output = "ch12_result.html")
 

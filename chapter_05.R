@@ -7,7 +7,6 @@ library(tidyverse)
 # データの読み込み
 # 財務データ
 financial_data <- read_csv("ch04_financial_data.csv")
-head(financial_data)
 
 # 株価データ
 stock_data <- read_csv("ch05_stock_data.csv")

@@ -17,7 +17,7 @@ head(index_data)
 earnings_data <- read_csv("ch08_earnings_data.csv")
 head(earnings_data)
 
-# 増益企業と減益企業の判定
+# 増益企業と減益企業の識別
 earnings_change <- earnings_data |>
   arrange(firm_id, year) |>
   group_by(firm_id) |>
@@ -41,11 +41,11 @@ dates <- stock_data |>
 # 開始時点と終了時点の判定
 start_end <- dates |>
   # 通算日数リストの日付と番号をアナウンスメント日とする
-  rename(announce_date = date,
+  rename(announce_date   = date,
          announce_number = date_number) |>
   # アナウンスメント前後の期間の最初と最後の番号
   mutate(start_number = announce_number - 240,
-         end_number = announce_number + 120)
+         end_number   = announce_number + 120)
 
 # 決算発表日からの相対日数を日ごとに適用
 dates_announce <- dates |>
@@ -61,7 +61,7 @@ sample_data <- earnings_change |>
   left_join(stock_data, by = c("firm_id", "date")) |>
   left_join(index_data, by = "date")
 
-# firm_idが1、yearが2023のデータを確認
+# firm_idが1，yearが2023のデータを確認
 sample_data |>
   filter(firm_id == 1, year == 2023) |>
   select(announce_date, relative_date, date,
@@ -79,7 +79,7 @@ sample_return <- sample_data |>
          index_return = replace_na(index_return, 0)) |>
   ungroup()
 
-# firm_idが1、yearが2023、relative_dateが0のデータについて、
+# firm_idが1，yearが2023，relative_dateが0のデータについて，
 # 株式リターンとインデックスリターンの確認
 sample_return |>
   filter(firm_id == 1, year == 2023, relative_date == 0) |>
@@ -89,7 +89,7 @@ sample_return |>
 sample_ar <- sample_return |>
   mutate(ar = return - index_return)
 
-# firm_idが1、yearが2023、relative_dateが0のデータについて、
+# firm_idが1，yearが2023，relative_dateが0のデータについて，
 # ARの確認
 sample_ar |>
   filter(firm_id == 1, year == 2023, relative_date == 0) |>
@@ -107,13 +107,13 @@ sample_car <- sample_ar |>
   mutate(car = cumsum(ar)) |>
   ungroup()
 
-# firm_idが1、yearが2023、relative_dateが0のデータについて、
+# firm_idが1，yearが2023，relative_dateが0のデータについて，
 # CARの確認
 sample_car |>
   filter(firm_id == 1, year == 2023, relative_date == 0) |>
   select(car)
 
-# 増益減益それぞれでのCARの相対日数ごとの平均値
+# 増益企業と減益企業のそれぞれのCARの相対日数ごとの平均値
 sample_car_mean <- sample_car |>
   summarise(mean_car = mean(car),
             .by = c(earnings_change, relative_date))
