@@ -57,12 +57,6 @@ financial_data <- financial_data |>
          financial_leverage = total_assets / equity)
 
 # ROEの三分解の計算結果を表示
-# パイプ演算子を使用しない場合
-select(financial_data,
-       firm_name, year, roe,
-       profit_margin, asset_turnover, financial_leverage)
-
-# パイプ演算子を使用する場合
 financial_data |>
   select(firm_name, year, roe,
          profit_margin, asset_turnover, financial_leverage)
