@@ -71,7 +71,7 @@ vif(model_multiple)
 clean_data <- clean_data |>
   mutate(dividend_binary = as.numeric(dividend))
 
-# ロジスティック回帰モデル
+# ロジット分析
 model_logistic <- glm(dividend_binary ~ earnings, data = clean_data,
                       family = binomial(link = "logit"))
 
