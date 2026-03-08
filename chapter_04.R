@@ -11,10 +11,10 @@ rm(list = ls())
 8 / 2
 
 # tidyverseパッケージのインストール（初回）
-install.packages(c("tidyverse", "car", "psych", "modelsummary"))
+install.packages(c("tidyverse", "car","modelsummary"))
 
 # tidyverseパッケージのインストール（完了後は#でコメント・アウト）
-# install.packages(c("tidyverse", "car", "psych", "modelsummary"))
+# install.packages(c("tidyverse", "car", "modelsummary"))
 
 # パッケージの読み込み
 library(tidyverse)
@@ -41,7 +41,7 @@ head(financial_data)
 # 記述統計
 summary(financial_data)
 
-# ROEの三分解を計算して，結果をfinancial_dataに追加する
+# ROEの3分解を計算して，結果をfinancial_dataに追加する
 # 第1引数を直接書く場合
 financial_data <- mutate(financial_data,
                          roe                = earnings / equity,
@@ -56,7 +56,7 @@ financial_data <- financial_data |>
          asset_turnover     = sales / total_assets,
          financial_leverage = total_assets / equity)
 
-# ROEの三分解の計算結果を表示
+# ROEの3分解の計算結果を表示
 financial_data |>
   select(firm_name, year, roe,
          profit_margin, asset_turnover, financial_leverage)

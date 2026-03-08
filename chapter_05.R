@@ -13,7 +13,8 @@ stock_data <- read_csv("ch05_stock_data.csv")
 head(stock_data)
 
 # 複合キー（stock_code と year）で結合
-join_data <- inner_join(financial_data, stock_data, by = c("stock_code", "year"))
+join_data <- inner_join(financial_data, stock_data,
+                        by = c("stock_code", "year"))
 
 # 不要な列の削除
 clean_data <- join_data |>
@@ -31,7 +32,7 @@ head(clean_data)
 # EPSとBPSの計算
 clean_data <- clean_data |>
   mutate(eps = earnings / shares_outstanding,
-         bps = equity / shares_outstanding )
+         bps = equity / shares_outstanding)
 
 # 必要ならCSVに保存
 write_csv(clean_data, "ch05_clean_data.csv")

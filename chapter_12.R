@@ -52,7 +52,7 @@ t.test(roa ~ ifrs, data = financial_data)
 # ロジット分析の実施
 model_logit <- glm(ifrs ~ ratio_goodwill + ratio_rd
                    + ratio_foreign_sales + ratio_foreign_shares
-                   + size+ leverage + roa,
+                   + size + leverage + roa,
                    data = financial_data,
                    family = binomial(link = "logit"))
 

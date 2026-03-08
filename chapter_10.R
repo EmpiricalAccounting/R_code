@@ -92,7 +92,7 @@ msummary(list(model_lead_1, model_lead_2),
          star = TRUE,
          # 有意水準と星の数を設定する
          stars = c("*" = .10, "**" = .05, "***" = .01),
-         # 観測値の数と自由度調整済み決定係数を表示させる
+         # 観測値の数と自由度調整済決定係数を表示させる
          gof_map = c("nobs", "adj.r.squared"),
          # 結果の表の保存
          output = "ch10_result.html")
