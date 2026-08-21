@@ -77,7 +77,7 @@ model_logit <- glm(dividend_dummy ~ earnings, data = clean_data,
                       family = binomial(link = "logit"))
 
 # 結果の表示
-summary(model_logistic)
+summary(model_logit)
 
 # オッズ比の計算
-exp(coef(model_logistic))
+exp(coef(model_logit))
