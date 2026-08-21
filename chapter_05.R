@@ -70,10 +70,10 @@ vif(model_multiple)
 
 # 配当の有無（dividend）のTRUEとFALSEを1と0に変換
 clean_data <- clean_data |>
-  mutate(dividend_binary = as.numeric(dividend))
+  mutate(dividend_dummy = as.numeric(dividend))
 
 # ロジット分析
-model_logistic <- glm(dividend_binary ~ earnings, data = clean_data,
+model_logit <- glm(dividend_dummy ~ earnings, data = clean_data,
                       family = binomial(link = "logit"))
 
 # 結果の表示
